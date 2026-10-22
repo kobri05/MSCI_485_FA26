@@ -1,0 +1,67 @@
+Date (M.D.Y),Location,Transect_Num,Visibility_m,Species ,Total_Count,
+8.29.2026,McAbee,1,2,warty_cucumber,1,
+8.26.2026,McAbee,1,2,bat_star,22,
+8.29.2026,McAbee,1,2,gumboot_chit,4,
+8.26.2026,McAbee,2,2,bat_star,14,
+8.26.2026,McAbee,2,2,giant_spine_star,4,
+8.26.2026,McAbee,2,2,kellets_whelk,1,
+8.26.2026,McAbee,2,2,wavy_turban,1,
+8.26.2026,McAbee,2,2,sheep_crab,2,
+8.26.2026,McAbee,2,2,gumboot_chit,5,
+8.26.2026,McAbee,2,2,purple_urchin,75,
+8.26.2026,McAbee,3,2,bat_star,8,
+8.26.2026,McAbee,3,2,gumboot_chit,1,
+8.26.2026,McAbee,3,2,purple_urchin,50,
+8.26.2026,McAbee,3,2,ca_cucumber,1,
+8.26.2026,McAbee,4,3,flat_ab,1,
+8.26.2026,McAbee,4,3,ca_cucumber,3,
+8.26.2026,McAbee,4,3,warty_cucumber,1,
+8.26.2026,McAbee,4,3,bat_star,10,
+8.26.2026,McAbee,4,3,short_spine_star,1,
+8.26.2026,McAbee,4,3,wavy_turban,6,
+8.26.2026,McAbee,4,3,purple_urchin,21,
+8.26.2026,McAbee,5,3,warty_cucumber,1,
+8.26.2026,McAbee,5,3,bat_star,6,
+8.26.2026,McAbee,5,3,wavy_turban,25,
+8.26.2026,McAbee,5,3,purple_urchin,50,
+9.12.2026,target_rock,1,2.5,kellets_whelk,2,"Alex, Casey and Conner"
+9.12.2026,target_rock,1,2.5,sheep_crab,2,"Alex, Casey and Conner"
+9.12.2026,target_rock,1,2.5,rock_scallop,2,"Alex, Casey and Conner"
+9.12.2026,target_rock,2,2.5,kellets_whelk,1,"Alex, Casey and Conner"
+9.12.2026,target_rock,2,2.5,wavy_turban,41,"Alex, Casey and Conner"
+9.12.2026,target_rock,2,2.5,rock_scallop,2,"Alex, Casey and Conner"
+9.12.2026,target_rock,3,1.5,bat_star,9,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,sun_star,3,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,chestnut_cowry,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,kellets_whelk,15,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,wavy_turban,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,black_hare,8,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,sheep_crab,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,rock_scallop,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,3,1.5,brown_gold_gorg,4,"Emily, Kate, Jake"
+9.12.2026,target_rock,4,1.5,bat_star,9,"Emily, Kate, Jake"
+9.12.2026,target_rock,4,1.5,kellets_whelk,6,"Emily, Kate, Jake"
+9.12.2026,target_rock,4,1.5,black_hare,4,"Emily, Kate, Jake"
+9.12.2026,target_rock,4,1.5,rock_crab,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,4,1.5,purple_urchin,2,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,warty_cucumber,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,bat_star,7,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,kellets_whelk,5,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,black_hare,2,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,gumboot_chit,2,"Emily, Kate, Jake"
+9.12.2026,target_rock,5,1.5,rock_scallop,1,"Emily, Kate, Jake"
+9.12.2026,target_rock,6,1.5,bat_star,5,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,6,1.5,chestnut_cowry,1,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,6,1.5,kellets_whelk,10,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,6,1.5,ca_hare,3,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,6,1.5,sheep_crab,2,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,6,1.5,purple_urchin,7,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,7,1.5,bat_star,15,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,7,1.5,kellets_whelk,10,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,7,1.5,sheep_crab,3,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,7,1.5,purple_urchin,1,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,8,2.4,bat_star,5,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,8,2.4,chestnut_cowry,1,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,8,2.4,kellets_whelk,12,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,8,2.4,ca_hare,1,"Alannah, Curtis, John, Mateo"
+9.12.2026,target_rock,8,2.4,sheep_crab,4,"Alannah, Curtis, John, Mateo"

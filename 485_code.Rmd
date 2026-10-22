@@ -16,9 +16,9 @@ library(janitor)
 
 ## Load in Data
 ```{r data loading}
-inverts_master <- read.csv("")
-fish_master <- read.csv("")
-upc_master <- read.csv("") #these chunks of code load in our master spreadsheets for data analysis. kate will keep updating her installed .csv's as we collect more data, but this will allow us to keep code relatively clean and our files relatively clean as well!
+inverts_master <- read.csv("invert_master_data.csv")
+fish_master <- read.csv("fish_master_data.csv")
+upc_master <- read.csv("upc_master_data.csv") #these chunks of code load in our master spreadsheets for data analysis. kate will keep updating her installed .csv's as we collect more data, but this will allow us to keep code relatively clean and our files relatively clean as well!
 ```
 
 ## Data Cleaning
@@ -31,7 +31,18 @@ upc_master <- clean_names (upc_master)
 ## Data Wrangling
 ```{r bbuild mcabee data}
 inverts_mcabee <- inverts_master |>
-  filter(location == "McAbee") #will be something along this line; i will fix as we update master spreadsheets!
+  filter(location == "McAbee") 
 fish_mcabee <- fish_master |>
+  filter(site_location == "McAbee")
+upc_mcabee <- upc_master |>
+  filter(location == "McAbee")
 ```
 
+```{r bbuild morro data}
+inverts_morro <- inverts_master |>
+  filter(location == "target_rock") 
+fish_morro <- fish_master |>
+  filter(site_location == "target_rock")
+upc_morro <- upc_master |>
+  filter(location == "target_rock")
+```
