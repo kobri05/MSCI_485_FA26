@@ -46,3 +46,47 @@ fish_morro <- fish_master |>
 upc_morro <- upc_master |>
   filter(location == "target_rock")
 ```
+
+## Visuals
+```{r ocean's visual 1}
+mcabee_density <- inverts_mcabee %>%
+  group_by(species) %>%
+  summarise(density = sum(total_count, na.rm = TRUE) / 100)
+
+ggplot(mcabee_density,
+       aes(x = reorder(species, -density), y = density,
+       fill = species)) +
+  geom_col() +
+labs(title = "Density of McAbee Invertebrate Species 2026",
+    x = "Species", y = "Density per Meter Squared") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
+
+```{r ocean's visual 2}
+morro_density <- inverts_morro %>%
+  group_by(species) %>%
+  summarise(density = sum(total_count, na.rm = TRUE) / 100)
+
+ggplot(morro_density,
+       aes(x = reorder(species, -density), y = density,
+       fill = species)) +
+  geom_col() +
+labs(title = "Density of Morro Bay Invertebrate Species 2026",
+    x = "Species", y = "Density per Meter Squared") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
+
