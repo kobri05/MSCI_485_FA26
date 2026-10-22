@@ -1,0 +1,64 @@
+---
+title: "MSCI485"
+author: "Oceanna Richardson"
+date: "2026-10-15"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+```
+```{r}
+Inverts_morro<-read.csv("McAbee Invertebrate Spreadsheet - Invertebrate Data (1).csv")
+Inverts_mcabee<-read.csv("Morro Bay Invertebrate Spreadsheet - Sheet1 (1).csv")
+```
+
+```{r}
+McAbee_density <- Inverts_mcabee %>%
+  group_by(Species) %>%
+  summarise(Density = sum(Total_Count, na.rm = TRUE) / 100)
+
+ggplot(McAbee_density,
+       aes(x = reorder(Species, -Density), y = Density,
+       fill = Species)) +
+  geom_col() +
+labs(title = "Density of McAbee Invertebrate Species 2026",
+    x = "Species", y = "Density per Meter Squared") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
+
+```{r}
+morro_density <- Inverts_morro %>%
+  group_by(Species) %>%
+  summarise(Density = sum(Total_Count, na.rm = TRUE) / 100)
+
+ggplot(morro_density,
+       aes(x = reorder(Species, -Density), y = Density,
+       fill = Species)) +
+  geom_col() +
+labs(title = "Density of Morro Bay Invertebrate Species 2026",
+    x = "Species", y = "Density per Meter Squared") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
+
