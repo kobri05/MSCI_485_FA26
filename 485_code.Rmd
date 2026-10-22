@@ -1,6 +1,35 @@
 ---
 title: "485_code"
+author: "Alex Brown, Emilt Christensen, Kate OBrien, Ocean Richardson, Matteo Vasquez"
 output: html_document
 ---
 
 # hi guys, this a test to see if the repository works
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(janitor)
+```
+
+## Load in Data
+```{r data loading}
+inverts_master <- read.csv("")
+fish_master <- read.csv("")
+upc_master <- read.csv("") #these chunks of code load in our master spreadsheets for data analysis. kate will keep updating her installed .csv's as we collect more data, but this will allow us to keep code relatively clean and our files relatively clean as well!
+```
+
+## Data Cleaning
+```{r scrubby dubby dub in my tubby tubby tub}
+inverts_master <- clean_names(inverts_master)
+fish_master <- clean_names (fish_master) #these lines ensure consistent naming conventions so that we dont get caught up in wordslop <3
+upc_master <- clean_names (upc_master)
+```
+
+## Data Wrangling
+```{r build more objects based on location so heart eyes}
+
+```
+
