@@ -29,7 +29,9 @@ upc_master <- clean_names (upc_master)
 ```
 
 ## Data Wrangling
-```{r build more objects based on location so heart eyes}
-
+```{r bbuild mcabee data}
+inverts_mcabee <- inverts_master |>
+  filter(location == "McAbee") #will be something along this line; i will fix as we update master spreadsheets!
+fish_mcabee <- fish_master |>
 ```
 
