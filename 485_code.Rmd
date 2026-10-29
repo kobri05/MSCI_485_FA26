@@ -121,7 +121,37 @@ ggplot(morro_fish_density,
   ) +
   guides(fill = guide_legend(ncol = 2))
 ```
+```{r Mateos Visual 2}
+mcabee_fish_count <- fish_master |>
+  filter(site_location == "mcabee") |>
+  group_by(species) |>
+  summarise(
+    total_count = sum(count, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_count))
 
+ggplot(mcabee_fish_count,
+       aes(x = reorder(species, -total_count),
+           y = total_count,
+           fill = species)) +
+  geom_col() +
+  labs(
+    title = "Fish Observed at McAbee 2026",
+    x = "Species",
+    y = "Number of Fish",
+    fill = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
 
 
 
