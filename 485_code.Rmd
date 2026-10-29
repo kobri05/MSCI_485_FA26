@@ -90,3 +90,45 @@ labs(title = "Density of Morro Bay Invertebrate Species 2026",
   guides(fill = guide_legend(ncol = 2))
 ```
 
+```{r Mateos Visual 1}
+morro_fish_density <- fish_master |>
+  filter(site_location == "target_rock") |>
+  group_by(species) |>
+  summarise(
+    density = sum(count, na.rm = TRUE) / 100,
+    .groups = "drop"
+  ) |>
+  arrange(desc(density))
+
+ggplot(morro_fish_density,
+       aes(x = reorder(species, -density),
+           y = density,
+           fill = species)) +
+  geom_col() +
+  labs(
+    title = "Density of Morro Bay Fish Species 2026",
+    x = "Species",
+    y = "Density per Meter Squared",
+    fill = "Species"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 8),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 9),
+    legend.key.height = unit(0.35, "cm"),
+    legend.key.width = unit(0.35, "cm")
+  ) +
+  guides(fill = guide_legend(ncol = 2))
+```
+
+
+
+
+
+
+
+
+
+
+
