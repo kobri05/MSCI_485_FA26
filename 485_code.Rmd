@@ -1,10 +1,17 @@
 ---
-title: "485_code"
-author: "Alex Brown, Emilt Christensen, Kate OBrien, Ocean Richardson, Matteo Vasquez"
+title: "Diver"
 output: html_document
 ---
 
-# hi guys, this a test to see if the repository works
+---
+title: "485_code"
+author: "Alex Brown, Emily Christensen, Kate OBrien, Ocean Richardson, Matteo Vasquez"
+output: html_document
+---
+
+# Load Before Continuing
+
+## Setup
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -12,42 +19,180 @@ library(ggplot2)
 library(tidyverse)
 library(dplyr)
 library(janitor)
+library(vegan)
 ```
 
-## Load in Data
+## Loading Data
+
 ```{r data loading}
+# these chunks of code load in our master spreadsheets for data analysis. kate will keep updating her installed .csv's as we collect more data, but this will allow us to keep code relatively clean and our files relatively clean as well!
 inverts_master <- read.csv("invert_master_data.csv")
+
 fish_master <- read.csv("fish_master_data.csv")
-upc_master <- read.csv("upc_master_data.csv") #these chunks of code load in our master spreadsheets for data analysis. kate will keep updating her installed .csv's as we collect more data, but this will allow us to keep code relatively clean and our files relatively clean as well!
+
+upc_master <- read.csv("upc_master_data.csv")
+
 ```
 
 ## Data Cleaning
+
 ```{r scrubby dubby dub in my tubby tubby tub}
+# these lines ensure consistent naming conventions so that we don't get caught up in wordslop <3
 inverts_master <- clean_names(inverts_master)
-fish_master <- clean_names (fish_master) #these lines ensure consistent naming conventions so that we dont get caught up in wordslop <3
+
+fish_master <- clean_names (fish_master) 
+
 upc_master <- clean_names (upc_master)
+
 ```
 
 ## Data Wrangling
-```{r bbuild mcabee data}
+
+```{r build mcabee data}
+# filtering data to each location for site specific analysis
 inverts_mcabee <- inverts_master |>
-  filter(location == "McAbee") 
+  filter(location == "mcabee") 
+
 fish_mcabee <- fish_master |>
-  filter(site_location == "McAbee")
+  filter(site_location == "mcabee")
+
 upc_mcabee <- upc_master |>
-  filter(location == "McAbee")
+  filter(location == "mcabee")
+
 ```
 
-```{r bbuild morro data}
+```{r build morro data}
+# filtering data to each location for site specific analysis (Morro Bay Edition)
 inverts_morro <- inverts_master |>
   filter(location == "target_rock") 
+
 fish_morro <- fish_master |>
   filter(site_location == "target_rock")
+
 upc_morro <- upc_master |>
   filter(location == "target_rock")
+
 ```
 
-## Visuals
+# Shannon Diversity
+
+```{r shannon setup}
+# organizing the data into total observations per species to run Shannon Index off of
+
+# Monterey Bay
+
+# fish
+shannon_fish_mcabee <- fish_mcabee |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+# invert
+shannon_inverts_mcabee <- inverts_mcabee |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+
+# Morro Bay
+
+# fish
+shannon_fish_morro <- fish_morro |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+# invert
+shannon_inverts_morro <- inverts_morro |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+
+# Leo Carrillo
+
+# fish
+shannon_fish_leo <- fish_leo |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+# invert
+shannon_inverts_leo <- inverts_leo |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+
+# La Jolla
+
+# fish
+shannon_fish_jolla <- fish_jolla |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+# invert
+shannon_inverts_jolla <- inverts_jolla |>
+  select("species", "count") |>
+  group_by(species) |>
+  summarize(total_count = sum(count))
+
+# names have been preemptively entered into the data, so check for conflicting names if any errors occur
+```
+
+```{r shannon knock them down}
+# shannon diversity calculations and table output
+
+# Monterey Bay
+
+# fish
+mont_f <- diversity(shannon_fish_mcabee$total_count)
+
+# invert
+mont_i <- diversity(shannon_inverts_mcabee$total_count)
+
+# Morro Bay
+
+# fish
+morr_f <- diversity(shannon_fish_morro$total_count)
+
+# invert
+morr_i <- diversity(shannon_inverts_morro$total_count)
+
+# Leo Carrillo
+
+# fish
+leo_f <- diversity(shannon_fish_leo$total_count)
+
+# invert
+leo_i <- diversity(shannon_inverts_leo$total_count)
+
+# La Jolla
+
+# fish
+joll_f <- diversity(shannon_fish_jolla$total_count)
+
+# invert
+joll_i <-diversity(shannon_inverts_jolla$total_count)
+
+
+# fish diversity index table creation
+tibble("Monterey Diversity" = mont_f, 
+       "Morro Bay Diversity" = morr_f, 
+       "Leo Carrillo Diveristy" = leo_f, 
+       "La Jolla Diversity" = joll_f)
+
+# invert diversity index table creation
+tibble("Monterey Diversity" = mont_i, 
+       "Morro Bay Diversity" = morr_i, 
+       "Leo Carrillo Diveristy" = leo_i, 
+       "La Jolla Diversity" = joll_i)
+
+# again, names could be a potential issue for running code in this chunk
+```
+
+# Visuals
 ```{r ocean's visual 1}
 mcabee_density <- inverts_mcabee %>%
   group_by(species) %>%
@@ -121,6 +266,7 @@ ggplot(morro_fish_density,
   ) +
   guides(fill = guide_legend(ncol = 2))
 ```
+
 ```{r Mateos Visual 2}
 mcabee_fish_count <- fish_master |>
   filter(site_location == "mcabee") |>
@@ -152,13 +298,3 @@ ggplot(mcabee_fish_count,
   ) +
   guides(fill = guide_legend(ncol = 2))
 ```
-
-
-
-
-
-
-
-
-
-
