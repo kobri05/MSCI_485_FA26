@@ -293,3 +293,66 @@ ggplot(mcabee_fish_count,
   ) +
   guides(fill = guide_legend(ncol = 2))
 ```
+
+```{r}
+## Fish richness by site
+fish_richness <- fish_master |>
+  filter(
+    !is.na(site_location),
+    !is.na(species),
+    !is.na(count),
+    count > 0
+  ) |>
+  group_by(site_location) |>
+  summarise(
+    richness = n_distinct(species),
+    .groups = "drop"
+  ) |>
+  mutate(
+    site_label = str_to_title(str_replace_all(site_location, "_", " "))
+  )
+
+ggplot(
+  fish_richness,
+  aes(x = reorder(site_label, richness), y = richness, fill = site_label)
+) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Fish Species Richness by Site",
+    x = "Site",
+    y = "Total Species Richness"
+  ) +
+  theme_minimal()
+```
+```{r}
+## Invertebrate richness by site
+invert_richness <- inverts_master |>
+  filter(
+    !is.na(location),
+    !is.na(species),
+    !is.na(total_count),
+    total_count > 0
+  ) |>
+  group_by(location) |>
+  summarise(
+    richness = n_distinct(species),
+    .groups = "drop"
+  ) |>
+  mutate(
+    site_label = str_to_title(str_replace_all(location, "_", " "))
+  )
+
+ggplot(
+  invert_richness,
+  aes(x = reorder(site_label, richness), y = richness, fill = site_label)
+) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Invertebrate Species Richness by Site",
+    x = "Site",
+    y = "Total Species Richness"
+  ) +
+  theme_minimal()
+```
