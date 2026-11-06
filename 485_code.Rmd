@@ -69,7 +69,9 @@ upc_morro <- upc_master |>
 
 ```
 
-# Shannon Diversity
+# Analysies
+
+## Shannon Diversity
 
 ```{r shannon setup}
 # organizing the data into total observations per species to run Shannon Index off of
@@ -77,13 +79,13 @@ upc_morro <- upc_master |>
 # Monterey Bay
 
 # fish
-shannon_fish_mcabee <- fish_mcabee |>
+tot_fish_mcabee <- fish_mcabee |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
 
 # invert
-shannon_inverts_mcabee <- inverts_mcabee |>
+tot_invert_mcabee <- inverts_mcabee |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
@@ -92,13 +94,13 @@ shannon_inverts_mcabee <- inverts_mcabee |>
 # Morro Bay
 
 # fish
-shannon_fish_morro <- fish_morro |>
+tot_fish_morro <- fish_morro |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
 
 # invert
-shannon_inverts_morro <- inverts_morro |>
+tot_invert_morro <- inverts_morro |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
@@ -107,13 +109,13 @@ shannon_inverts_morro <- inverts_morro |>
 # Leo Carrillo
 
 # fish
-shannon_fish_leo <- fish_leo |>
+tot_fish_leo <- fish_leo |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
 
 # invert
-shannon_inverts_leo <- inverts_leo |>
+tot_invert_leo <- inverts_leo |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
@@ -122,13 +124,13 @@ shannon_inverts_leo <- inverts_leo |>
 # La Jolla
 
 # fish
-shannon_fish_jolla <- fish_jolla |>
+tot_fish_jolla <- fish_jolla |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
 
 # invert
-shannon_inverts_jolla <- inverts_jolla |>
+tot_invert_jolla <- inverts_jolla |>
   select("species", "count") |>
   group_by(species) |>
   summarize(total_count = sum(count))
@@ -142,50 +144,139 @@ shannon_inverts_jolla <- inverts_jolla |>
 # Monterey Bay
 
 # fish
-mont_f <- diversity(shannon_fish_mcabee$total_count)
+mont_f <- diversity(tot_fish_mcabee$total_count)
 
 # invert
-mont_i <- diversity(shannon_inverts_mcabee$total_count)
+mont_i <- diversity(tot_invert_mcabee$total_count)
 
 # Morro Bay
 
 # fish
-morr_f <- diversity(shannon_fish_morro$total_count)
+morr_f <- diversity(tot_fish_morro$total_count)
 
 # invert
-morr_i <- diversity(shannon_inverts_morro$total_count)
+morr_i <- diversity(tot_invert_morro$total_count)
 
 # Leo Carrillo
 
 # fish
-leo_f <- diversity(shannon_fish_leo$total_count)
+leo_f <- diversity(tot_fish_leo$total_count)
 
 # invert
-leo_i <- diversity(shannon_inverts_leo$total_count)
+leo_i <- diversity(tot_invert_leo$total_count)
 
 # La Jolla
 
 # fish
-joll_f <- diversity(shannon_fish_jolla$total_count)
+joll_f <- diversity(tot_fish_jolla$total_count)
 
 # invert
-joll_i <-diversity(shannon_inverts_jolla$total_count)
+joll_i <-diversity(tot_invert_jolla$total_count)
 
 
-# fish diversity index table creation
-tibble("Monterey Diversity" = mont_f, 
-       "Morro Bay Diversity" = morr_f, 
-       "Leo Carrillo Diveristy" = leo_f, 
-       "La Jolla Diversity" = joll_f)
+# fish diversity index df creation
+list("site" = c("Monterey Bay", "Morro Bay", "Leo Carrillo", "La Jolla"), 
+     "index"= c(mont_f, morr_f, leo_f, joll_f)) |>
+  as.data.frame()
 
-# invert diversity index table creation
-tibble("Monterey Diversity" = mont_i, 
-       "Morro Bay Diversity" = morr_i, 
-       "Leo Carrillo Diveristy" = leo_i, 
-       "La Jolla Diversity" = joll_i)
+# invert diversity index df creation
+list("site" = c("Monterey Bay", "Morro Bay", "Leo Carrillo", "La Jolla"), 
+     "index"= c(mont_i, morr_i, leo_i, joll_i)) |>
+  as.data.frame()
 
 # again, names could be a potential issue for running code in this chunk
 ```
+
+## Density Stuff
+
+```{r density data wrangle}
+# calculating densities based off of number of 30m transects deployed
+
+# fish transects will be linear density (1/m)
+
+# invert transects will be area density (1/m^2)
+
+# Monterey: 16 fish (30 x 16 = 480 m), 5 invert (30 x 2 x 5 = 300 m^2)
+
+den_mont_fish <- tot_fish_mcabee |>
+  mutate("density" = total_count/480) |>
+  mutate("site" = "Monterey Bay")
+
+den_mont_invert <- tot_invert_mcabee |>
+  mutate("density" = total_count/300) |>
+  mutate("site" = "Monterey Bay")
+
+
+# Morro Bay: 8 fish (30 x 8 = 240 m), 8 invert (30 x 2 x 8 = 480 m^2)
+
+den_morr_fish <- tot_fish_morro |>
+  mutate("density" = total_count/240) |>
+  mutate("site" = "Morro Bay")
+
+den_morr_invert <- tot_invert_morro |>
+  mutate("density" = total_count/480) |>
+  mutate("site" = "Morro Bay")
+
+# Leo Carrillo:
+
+den_leo_fish <- tot_fish_leo |>
+  mutate("density" = total_count/1) |> # add density here
+  mutate("site" = "Leo Carrillo")
+
+den_leo_invert <- tot_invert_leo |>
+  mutate("density" = total_count/1) |> # add density here
+  mutate("site" = "Leo Carrillo")
+
+# La Jolla:
+
+den_jolla_fish <- tot_fish_jolla |>
+  mutate("density" = total_count/1) |> # add density here
+  mutate("site" = "La Jolla")
+
+den_jolla_invert <- tot_invert_jolla |>
+  mutate("density" = total_count/1) |> # add density here
+  mutate("site" = "La Jolla")
+
+```
+
+```{r assumptions}
+
+# combining fish densities from all sites
+binded_density_fish <- bind_rows(den_mont_fish, den_morr_fish) 
+# need to add other densities to here for assumption tests
+
+# combining invert densities from all sites
+binded_density_invert <- bind_rows(den_mont_invert, den_morr_invert)
+# need to add other densities to here for assumption tests
+
+
+# assumption of normality (p < 0.05 means that we fail assumption)
+
+# fish
+binded_density_fish|> 
+  group_by(site)|>
+  do(broom::tidy(shapiro.test(.$density))) |>
+  ungroup() |>
+  select(site, W = statistic, 'pvalue' = p.value)
+
+# invert
+binded_density_invert|> 
+  group_by(site)|>
+  do(broom::tidy(shapiro.test(.$density))) |>
+  ungroup() |>
+  select(site, W = statistic, 'pvalue' = p.value)
+
+
+# homogeneity of variances (p < 0.05 means that we fail assumption)
+
+# fish
+bartlett.test(density ~ site, data = binded_density_fish)
+
+
+# invert
+bartlett.test(density ~ site, data = binded_density_invert)
+```
+
 
 # Visuals
 ```{r ocean's visual 1}
