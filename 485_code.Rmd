@@ -73,6 +73,16 @@ upc_morro <- upc_master |>
 
 ## Shannon Diversity
 
+Shannon diversity will be calculated in two ways:
+
+- **1) Diversity will be calculated as a total for each site to create a more precise estimate for the sites**
+
+- **2) Diversity will be calculated for each transect to allow an ANOVA to be run on replicates**
+
+Use the first index number to describe the sites individually and use the second index number to describe the relationships between different sites
+
+### Fancy Shannon
+
 ```{r shannon setup}
 # organizing the data into total observations per species to run Shannon Index off of
 
@@ -187,6 +197,122 @@ list("site" = c("Monterey Bay", "Morro Bay", "Leo Carrillo", "La Jolla"),
 # again, names could be a potential issue for running code in this chunk
 ```
 
+### Shannon ANOVA
+
+```{r shannon data control}
+# diversity df creation
+
+# fish
+group_fish <- fish_master |>
+  uncount(count) |>
+  group_by(site_location, transect_num, species) |>
+  count()
+
+# invert
+group_invert <- inverts_master |>
+  uncount(count) |>
+  group_by(location, transect_num, species) |>
+  count()
+
+```
+
+```{r}
+# shannon index calculation per transect
+
+# fish
+h_fish <- group_fish |>
+  group_by(site_location, transect_num) |>
+  mutate(tn = sum(n),
+         pi = n/tn,
+         lnpi = log(pi),
+         "pi*lnpi" = pi * lnpi,
+         h = -sum(pi*lnpi))
+
+h_fish <- h_fish|>
+  group_by(site_location, transect_num, h) |>
+  summarize()
+
+# invert
+h_invert <- group_invert |>
+  group_by(location, transect_num) |>
+  mutate(tn = sum(n),
+         pi = n/tn,
+         lnpi = log(pi),
+         "pi*lnpi" = pi * lnpi,
+         h = -sum(pi*lnpi))
+
+h_invert <- h_invert|>
+  group_by(location, transect_num, h) |>
+  summarize()
+
+```
+
+```{r diversity conditions}
+
+# normality
+
+# fish
+h_fish |> 
+  group_by(site_location) |>
+  do(broom::tidy(shapiro.test(.$h))) |>
+  ungroup() |>
+  select(site_location, W = statistic, "p-value" = p.value)
+
+# invert
+h_invert |>
+  group_by(location) |>
+  do(broom::tidy(shapiro.test(.$h))) |>
+  ungroup() |>
+  select(location, W = statistic, "p-value" = p.value)
+
+
+# homogeneity of residuals
+
+# fish
+bartlett.test(h ~ site_location, data = h_fish)
+
+# invert
+bartlett.test(h ~ location, data = h_invert)
+
+```
+
+```{r diversity ANOVA}
+# which analysis is ran depends on if the data passes the condition tests (delete tests that we will not use, this will not be determined until all data is entered)
+
+# all p >= 0.05, use `aov()`
+
+# any p < 0.05, use `kruskal.test`
+
+
+# if something shows up in ANOVA tests
+
+# use a Tukey or Dunn post HOC test
+
+
+
+# fish
+h_fih_aov <- lm(h ~ site_location, data = h_fish)
+aov(h_fih_aov)
+
+kruskal.test(h ~ site_location, data = h_fish)
+
+TukeyHSD(aov(h_fih_aov))
+
+dunnTest(h ~ site_location, data = h_fish, method = "bonferroni")
+
+# invert
+h_inv_aov <- lm(h ~ location, data = h_invert)
+aov(h_inv_aov)
+
+kruskal.test(h ~ location, data = h_invert)
+
+TukeyHSD(aov(h_inv_aov))
+
+dunnTest(h ~ location, data = h_invert, method = "bonferroni")
+
+```
+
+
 ## Density Stuff
 
 ```{r density data wrangle}
@@ -242,11 +368,11 @@ den_jolla_invert <- tot_invert_jolla |>
 ```{r assumptions}
 
 # combining fish densities from all sites
-binded_density_fish <- bind_rows(den_mont_fish, den_morr_fish) 
+binded_density_fish <- bind_rows(den_mont_fish, den_morr_fish, den_leo_fish, den_jolla_fish) 
 # need to add other densities to here for assumption tests
 
 # combining invert densities from all sites
-binded_density_invert <- bind_rows(den_mont_invert, den_morr_invert)
+binded_density_invert <- bind_rows(den_mont_invert, den_morr_invert, den_leo_invert, den_jolla_invert)
 # need to add other densities to here for assumption tests
 
 
@@ -275,6 +401,20 @@ bartlett.test(density ~ site, data = binded_density_fish)
 
 # invert
 bartlett.test(density ~ site, data = binded_density_invert)
+```
+
+```{r density ANOVA}
+# probably will be all using non-parametric tests since the data funky, so we usin' kruskal
+
+# fish
+kruskal.test(density ~ site, data = binded_density_fish)
+
+dunnTest(density ~ site, data = binded_density_fish, method = "bonferroni")
+
+# invert
+kruskal.test(density ~ site, data = binded_density_invert)
+
+dunnTest(density ~ site, data = binded_density_invert, method = "bonferroni")
 ```
 
 
