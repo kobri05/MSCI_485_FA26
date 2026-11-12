@@ -73,13 +73,13 @@ upc_morro <- upc_master |>
 ```{r build leo carrillo data}
 # filtering data to each location for site specific analysis (Leo Carrillo Flavor)
 inverts_leo <- inverts_master |>
-  filter(location == "leo_carrillo") 
+  filter(location == "leo_carrillo", location == "refugio") 
 
 fish_leo <- fish_master |>
-  filter(site_location == "leo_carrillo")
+  filter(site_location == "leo_carrillo", site_location == "refugio")
 
 upc_leo <- upc_master |>
-  filter(location == "leo_carrillo")
+  filter(location == "leo_carrillo", location == "refugio")
 
 ```
 
