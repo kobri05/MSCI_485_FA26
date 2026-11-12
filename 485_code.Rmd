@@ -15,6 +15,7 @@ library(tidyverse)
 library(dplyr)
 library(janitor)
 library(vegan)
+library(FSA)
 ```
 
 ## Loading Data
@@ -68,6 +69,33 @@ upc_morro <- upc_master |>
   filter(location == "target_rock")
 
 ```
+
+```{r build leo carrillo data}
+# filtering data to each location for site specific analysis (Leo Carrillo Flavor)
+inverts_leo <- inverts_master |>
+  filter(location == "leo_carrillo") 
+
+fish_leo <- fish_master |>
+  filter(site_location == "leo_carrillo")
+
+upc_leo <- upc_master |>
+  filter(location == "leo_carrillo")
+
+```
+
+```{r build la jolla data}
+# filtering data to each location for site specific analysis (Episode La Jolla)
+inverts_jolla <- inverts_master |>
+  filter(location == "la_jolla_cove", location == "mission_point", location == "la_jolla_canyon", location == "marine_room") 
+
+fish_jolla <- fish_master |>
+  filter(site_location == "la_jolla_cove", site_location == "mission_point", site_location == "la_jolla_canyon", site_location == "marine_room") 
+
+upc_jolla <- upc_master |>
+  filter(location == "la_jolla_cove", location == "mission_point", location == "la_jolla_canyon", location == "marine_room") 
+
+```
+
 
 # Analysies
 
@@ -419,10 +447,11 @@ dunnTest(density ~ site, data = binded_density_invert, method = "bonferroni")
 
 
 # Visuals
+
 ```{r ocean's visual 1}
 mcabee_density <- inverts_mcabee %>%
   group_by(species) %>%
-  summarise(density = sum(total_count, na.rm = TRUE) / 100)
+  summarise(density = sum(count, na.rm = TRUE) / 100)
 
 ggplot(mcabee_density,
        aes(x = reorder(species, -density), y = density,
@@ -443,7 +472,7 @@ labs(title = "Density of McAbee Invertebrate Species 2026",
 ```{r ocean's visual 2}
 morro_density <- inverts_morro %>%
   group_by(species) %>%
-  summarise(density = sum(total_count, na.rm = TRUE) / 100)
+  summarise(density = sum(count, na.rm = TRUE) / 100)
 
 ggplot(morro_density,
        aes(x = reorder(species, -density), y = density,
@@ -525,37 +554,6 @@ ggplot(mcabee_fish_count,
   guides(fill = guide_legend(ncol = 2))
 ```
 
-```{r}
-## Fish richness by site
-fish_richness <- fish_master |>
-  filter(
-    !is.na(site_location),
-    !is.na(species),
-    !is.na(count),
-    count > 0
-  ) |>
-  group_by(site_location) |>
-  summarise(
-    richness = n_distinct(species),
-    .groups = "drop"
-  ) |>
-  mutate(
-    site_label = str_to_title(str_replace_all(site_location, "_", " "))
-  )
-
-ggplot(
-  fish_richness,
-  aes(x = reorder(site_label, richness), y = richness, fill = site_label)
-) +
-  geom_col(show.legend = FALSE) +
-  coord_flip() +
-  labs(
-    title = "Fish Species Richness by Site",
-    x = "Site",
-    y = "Total Species Richness"
-  ) +
-  theme_minimal()
-```
 ```{r}
 ## Invertebrate richness by site
 invert_richness <- inverts_master |>
