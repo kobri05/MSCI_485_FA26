@@ -320,7 +320,7 @@ bartlett.test(h ~ location, data = h_invert)
 
 # fish
 h_fih_aov <- lm(h ~ site_location, data = h_fish)
-aov(h_fih_aov)
+anova(h_fih_aov)
 
 kruskal.test(h ~ site_location, data = h_fish)
 
@@ -330,7 +330,7 @@ dunnTest(h ~ site_location, data = h_fish, method = "bonferroni")
 
 # invert
 h_inv_aov <- lm(h ~ location, data = h_invert)
-aov(h_inv_aov)
+anova(h_inv_aov)
 
 kruskal.test(h ~ location, data = h_invert)
 
