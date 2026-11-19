@@ -560,8 +560,8 @@ invert_richness <- inverts_master |>
   filter(
     !is.na(location),
     !is.na(species),
-    !is.na(total_count),
-    total_count > 0
+    !is.na(count),
+    count > 0
   ) |>
   group_by(location) |>
   summarise(
