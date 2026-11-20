@@ -28,6 +28,10 @@ fish_master <- read.csv("fish_master_data.csv")
 
 upc_master <- read.csv("upc_master_data.csv")
 
+inverts_25 <-read.csv("invertebrate_data_2025.csv")
+
+fish_25 <- read.csv("fish_data_2025.csv")
+
 ```
 
 ## Data Cleaning
@@ -40,6 +44,36 @@ fish_master <- clean_names (fish_master)
 
 upc_master <- clean_names (upc_master)
 
+inverts_25 <-clean_names(inverts_25)
+
+fish_25 <- clean_names(fish_25)
+
+```
+
+
+## Fixing Historical Data
+
+Code from last year to filter out inconsistencies, credit to whichever vermin did this code
+
+```{r fish filter 25}
+fish_25 <- fish_25 %>% # Added to convert last years data to the same naming convention and species names as this year.
+  mutate(species = gsub("OYT_YOY", "Yellowtail_Rockfish", species))%>%
+  mutate(species = gsub("BLK_YOY", "Black_Rockfish", species))%>%
+  mutate(species = gsub("Black_rockfish", "Black_Rockfish", species))%>%
+  mutate(species = gsub("BLU_YOY", "Blue_Rockfish", species))%>%
+  mutate(site_location = gsub("Mission_Pt", "La_Jolla", site_location))%>%
+  filter(species != "UFO", species != "Rockfish", species != "KGB_YOY", species != "Unknown", species != "Perch")
+```
+
+```{r invert filter 25}
+inverts_25 <- inverts_25%>% # Added to convert last years data to the same naming convention and species names as this year.
+  na.omit(species)%>%
+  mutate(species = gsub("Wavy/Red_Turban_Snail", "Wavy_Red_Turban_Snail", species))%>%
+  mutate(species = gsub("Sheep/Masking_Crab", "Sheep_Masking_Crab", species))%>%
+  mutate(species = gsub("Brown/Golden", "Brown_Golden_Gorgonian", species))%>%
+  mutate(species = gsub("Black_Sea_Hare", "Black_CA_Sea_Hare", species))%>%
+  mutate(species = gsub("California_Sea_Hare", "Black_CA_Sea_Hare", species))%>%    mutate(location = gsub("Mission_Point", "La_Jolla", location))%>%
+  mutate(location = gsub("Canyon", "La_Jolla", location))
 ```
 
 ## Data Wrangling
@@ -55,6 +89,12 @@ fish_mcabee <- fish_master |>
 upc_mcabee <- upc_master |>
   filter(location == "mcabee")
 
+inverts_mcabee_25 <- inverts_25 |>
+  filter(location == "McAbee") 
+
+fish_mcabee_25 <- fish_25 |>
+  filter(site_location == "McAbee")
+
 ```
 
 ```{r build morro data}
@@ -68,31 +108,49 @@ fish_morro <- fish_master |>
 upc_morro <- upc_master |>
   filter(location == "target_rock")
 
+inverts_morro_25 <- inverts_25 |>
+  filter(location == "Morro_Bay") 
+
+fish_morro_25 <- fish_25 |>
+  filter(site_location == "Morro_Bay")
+
 ```
 
 ```{r build leo carrillo data}
 # filtering data to each location for site specific analysis (Leo Carrillo Flavor)
 inverts_leo <- inverts_master |>
-  filter(location == "leo_carrillo", location == "refugio") 
+  filter(location %in% c("leo_carrillo", "refugio")) 
 
 fish_leo <- fish_master |>
-  filter(site_location == "leo_carrillo", site_location == "refugio")
+  filter(site_location %in% c("leo_carrillo", "refugio"))
 
 upc_leo <- upc_master |>
-  filter(location == "leo_carrillo", location == "refugio")
+  filter(location %in% c("leo_carrillo", "refugio"))
+
+inverts_leo_25 <- inverts_25 |>
+  filter(location %in% c("Leo_Carillo", "Leo_Carrillo"))
+
+fish_leo_25 <- fish_25 |>
+  filter(site_location %in% c("Leo_Carillo", "Leo_Carrillo"))
 
 ```
 
 ```{r build la jolla data}
 # filtering data to each location for site specific analysis (Episode La Jolla)
 inverts_jolla <- inverts_master |>
-  filter(location == "la_jolla_cove", location == "mission_point", location == "la_jolla_canyon", location == "marine_room") 
+  filter(location %in% c("la_jolla_cove", "mission_point", "la_jolla_canyon", "marine_room")) 
 
 fish_jolla <- fish_master |>
-  filter(site_location == "la_jolla_cove", site_location == "mission_point", site_location == "la_jolla_canyon", site_location == "marine_room") 
+  filter(site_location %in% c("la_jolla_cove", "mission_point", "la_jolla_canyon", "marine_room")) 
 
 upc_jolla <- upc_master |>
-  filter(location == "la_jolla_cove", location == "mission_point", location == "la_jolla_canyon", location == "marine_room") 
+  filter(location %in% c("la_jolla_cove", "mission_point", "la_jolla_canyon", "marine_room")) 
+
+inverts_jolla_25 <- inverts_25 |>
+  filter(location %in% c("Canyon", "Mission_Point")) 
+
+fish_jolla_25 <- fish_25 |>
+  filter(site_location == "Mission_Pt") 
 
 ```
 
@@ -242,6 +300,21 @@ group_invert <- inverts_master |>
   group_by(location, transect_num, species) |>
   count()
 
+
+# 2025 data
+
+# fish
+group_fish_25 <- fish_25 |>
+  uncount(count) |>
+  group_by(site_location, team_1_4, transect_a_f, species) |>
+  count()
+
+# invert
+group_invert_25 <- inverts_25 |>
+  uncount(total_count) |>
+  group_by(location, team_1_4, transect_a_f, species) |>
+  count()
+
 ```
 
 ```{r}
@@ -271,6 +344,35 @@ h_invert <- group_invert |>
 
 h_invert <- h_invert|>
   group_by(location, transect_num, h) |>
+  summarize()
+
+
+# 2025 data
+
+# fish
+h_fish_25 <- group_fish_25 |>
+  group_by(site_location, team_1_4, transect_a_f) |>
+  mutate(tn = sum(n),
+         pi = n/tn,
+         lnpi = log(pi),
+         "pi*lnpi" = pi * lnpi,
+         h = -sum(pi*lnpi))
+
+h_fish_25 <- h_fish_25|>
+  group_by(site_location, team_1_4, transect_a_f, h) |>
+  summarize()
+
+# invert
+h_invert_25 <- group_invert_25 |>
+  group_by(location, team_1_4, transect_a_f) |>
+  mutate(tn = sum(n),
+         pi = n/tn,
+         lnpi = log(pi),
+         "pi*lnpi" = pi * lnpi,
+         h = -sum(pi*lnpi))
+
+h_invert_25 <- h_invert_25|>
+  group_by(location, team_1_4, transect_a_f, h) |>
   summarize()
 
 ```
